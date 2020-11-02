@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BloggerApplication.View;
+using System;
 
 namespace BloggerApplication
 {
@@ -7,6 +8,8 @@ namespace BloggerApplication
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+
+            RegisterLogin.UserVerify();
         }
     }
 }
