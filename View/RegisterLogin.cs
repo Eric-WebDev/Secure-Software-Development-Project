@@ -1,4 +1,5 @@
-﻿using BloggerApplication.Models;
+﻿using BloggerApplication.DB;
+using BloggerApplication.Models;
 using BloggerApplication.Seciurity;
 using System;
 using System.Collections.Generic;
@@ -7,10 +8,13 @@ using System.Text;
 
 namespace BloggerApplication.View
 {
-    class RegisterLogin
+   static class RegisterLogin
     {
+        // storage location
+         public static string location; 
         public static void UserVerify()
         {
+
             Console.WriteLine("Write 'Register' if you want to sign up, 'Log in' if you want to sign in or 'Exit' if you want to close the console");
             string input = Console.ReadLine();
             if (input != "Register" && input != "Log in" && input != "Exit")
@@ -24,7 +28,7 @@ namespace BloggerApplication.View
                     Environment.Exit(0);
                 else
                 {
-                    Console.WriteLine("Your command was {0}", input);
+                    Console.WriteLine("Your choosen option is {0}", input);
                     User user = new User();
                     Console.WriteLine("Username: ");
                     string usern = Console.ReadLine();
@@ -39,7 +43,7 @@ namespace BloggerApplication.View
                             Encryption.HashPassword(user.getPassword());
                             dbInsertUser(user.getUsername(), Encryption.HashPassword(user.getPassword()));
                             Console.WriteLine("You are now registered as {0}", user.getUsername());
-                            //dashboard(user.getUsername());
+                            Dashboard(user.getUsername());
                         }
                         else
                         {
@@ -62,10 +66,7 @@ namespace BloggerApplication.View
                                 string oldPass = Convert.ToString(reader["password"]);
                                 if (Encryption.verifyHashedPass(newPass, oldPass))
                                 {
-                                    Console.WriteLine("Grant acces");
-                                    //List<User> inputList = ConnectionData.StoreData();
-                                    //Console.WriteLine("Data in Blog app\n");
-                                    //DisplayMenu(inputList);
+                                    Dashboard(user.getUsername());
                                 }
 
                                 else
@@ -84,27 +85,9 @@ namespace BloggerApplication.View
                     }
                 }
             }
-            static bool dbVerifyUsername(string usern)
-            {
-                SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + "C:\\Modules\\Secure Software Development\\BloggerApplication\\DB\\BlogDB.mdf" + ";Integrated Security=True");
-                connection.Open();
-                SqlCommand command = new SqlCommand("Select username from dbo.Users where username=@usern", connection);
-                command.Parameters.AddWithValue("@usern", usern);
 
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        connection.Close();
-                        return false;
-                    }
-                    else
-                    {
-                        connection.Close();
-                        return true;
-                    }
-                }
-            }
+       
+
             static void dbInsertUser(string usern, string pass)
             {
                 SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename="+"C:\\Modules\\Secure Software Development\\BloggerApplication\\DB\\BlogDB.mdf"+";Integrated Security=True");
@@ -117,7 +100,28 @@ namespace BloggerApplication.View
             }
 
         }
-        
+        public static bool dbVerifyUsername(string usern)
+        {
+            SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + "C:\\Modules\\Secure Software Development\\BloggerApplication\\DB\\BlogDB.mdf" + ";Integrated Security=True");
+            connection.Open();
+            SqlCommand command = new SqlCommand("Select username from dbo.Users where username=@usern", connection);
+            command.Parameters.AddWithValue("@usern", usern);
+
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    connection.Close();
+                    return false;
+                }
+                else
+                {
+                    connection.Close();
+                    return true;
+                }
+            }
+        }
+
         public static string MaskPassword()
         {
             string pass = "";
@@ -145,6 +149,14 @@ namespace BloggerApplication.View
             } while (key.Key != ConsoleKey.Enter);
             Console.WriteLine();
             return pass;
+        }
+
+        public static void Dashboard(string username)
+        {
+            Console.WriteLine("You can add your posts now");
+            location = @"C:\Modules\Secure Software Development\BloggerApplication\DB\Storage\"+username+".txt";
+            List<BlogPost> inputList = ConnectionData.StoreData();        
+            Menu.DisplayMenu(inputList);
         }
     }
 }

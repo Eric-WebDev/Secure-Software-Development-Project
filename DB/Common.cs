@@ -4,8 +4,9 @@ using System.Text;
 
 namespace BloggerApplication.DB
 {
-    class Common
+    static class Common
     {
-        internal static readonly string location = @"C:\Modules\Secure Software Development\BloggerApplication\DB";
+
+        //internal static readonly string location = @"C:\Modules\Secure Software Development\BloggerApplication\DB\blogPostsDB.txt";
     }
 }

@@ -11,13 +11,12 @@ namespace BloggerApplication.Models
         public string BlogPostTitle { get; set; }
         public string BlogPostContent { get; set; }
 
-
-        public BlogPost(string blogId, string blogCategory, string blogTitle, string content)
+        public BlogPost(string blogId, string blogCategory, string blogPostTitle,string blogPostContent )
         {
             BlogPostId = blogId;
             BlogPostCategory = blogCategory;
-            BlogPostTitle = blogTitle;
-            BlogPostContent = content;
+            BlogPostTitle = blogPostTitle;
+            BlogPostContent = blogPostContent;
         }
     }
 }

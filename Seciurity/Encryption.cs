@@ -1,5 +1,6 @@
 ﻿using BloggerApplication.DB;
 using BloggerApplication.Models;
+using BloggerApplication.View;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,7 +24,7 @@ namespace BloggerApplication.Seciurity
                     aesAlg.IV = new byte[128 / 8];  // AES needs a 16-byte IV
                     ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
 
-                    using (FileStream fs = File.Open(Common.location, FileMode.OpenOrCreate))
+                    using (FileStream fs = File.Open(RegisterLogin.location, FileMode.OpenOrCreate))
                     {
                         using (CryptoStream cStream = new CryptoStream(fs, encryptor, CryptoStreamMode.Write))
                         {
@@ -31,7 +32,7 @@ namespace BloggerApplication.Seciurity
                             {
                                 foreach (var line in inputList)
                                 {
-                                    sWriter.Write($"{line.BlogPostId},{line.BlogPostCategory},{line.BlogPostTitle},{line.BlogPostTitle},{line.BlogPostCategory}|");
+                                    sWriter.Write($"{line.BlogPostId},{line.BlogPostCategory},{line.BlogPostTitle},{line.BlogPostContent}");
                                 }
                             }
                         }
@@ -68,7 +69,7 @@ namespace BloggerApplication.Seciurity
                     aesAlg.IV = new byte[128 / 8];  // AES needs a 16-byte IV
                     ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
 
-                    using (FileStream reader = new FileStream(Common.location, FileMode.Open))
+                    using (FileStream reader = new FileStream(RegisterLogin.location, FileMode.Open))
                     {
                         using (CryptoStream csDecrypt = new CryptoStream(reader, decryptor, CryptoStreamMode.Read))
                         {
@@ -117,8 +118,5 @@ namespace BloggerApplication.Seciurity
             }
             return true;
         }
-
-
-
     }
 }
