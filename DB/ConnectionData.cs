@@ -5,16 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace BloggerApplication.DB
 {
-   internal static class ConnectionData
+    internal static class ConnectionData
     {
-        /// <summary>
-        /// Get the product from the text file
-        /// </summary>
-        /// <returns>The full list of items from the text file "Data.txt"</returns>
+        // Read data from the text file and return the full list of items from the specific user text file
         internal static List<BlogPost> StoreData()
         {
             try
@@ -26,9 +22,11 @@ namespace BloggerApplication.DB
                 using (Aes myAes = Aes.Create())
                 {
                     myAes.Padding = PaddingMode.PKCS7;
-                    myAes.KeySize = 128;           // in bits
-                    myAes.Key = new byte[128 / 8]; // 16 bytes for 128 bit encryption
-                    myAes.IV = new byte[128 / 8];  // AES needs a 16-byte IV
+                    myAes.KeySize = 128;
+                    // using 16 bytes for 128 bit encryption
+                    myAes.Key = new byte[128 / 8];
+                    // AES needs a 16-byte IV
+                    myAes.IV = new byte[128 / 8];
                     textString = Encryption.Decrypt(myAes.Key, myAes.IV);
                 }
                 // Split the text that is being read in
@@ -50,10 +48,7 @@ namespace BloggerApplication.DB
                 throw;
             }
         }
-
-        /// <summary>
-        /// Create the text file if it doesn't already exist
-        /// </summary>
+        // create file if does not exist 
         private static void CreateFile()
         {
             if (!File.Exists(RegisterLogin.location))
@@ -61,12 +56,6 @@ namespace BloggerApplication.DB
                 using (var stream = File.Create(RegisterLogin.location)) { }
             }
         }
-
-
-        /// <summary>
-        /// Save changes made to list of products to text file
-        /// </summary>
-        /// <param name="inputList">The list imported from StoreData()</param>
         internal static void SaveChanges(List<BlogPost> inputList)
         {
             try
@@ -75,9 +64,9 @@ namespace BloggerApplication.DB
                 using (AesManaged myAes = new AesManaged())
                 {
                     myAes.Padding = PaddingMode.PKCS7;
-                    myAes.KeySize = 128;           // in bits
-                    myAes.Key = new byte[128 / 8]; // 16 bytes for 128 bit encryption
-                    myAes.IV = new byte[128 / 8];  // AES needs a 16-byte IV
+                    myAes.KeySize = 128;
+                    myAes.Key = new byte[128 / 8];
+                    myAes.IV = new byte[128 / 8];
                     Encryption.Encrypt(inputList, myAes.Key, myAes.IV);
                 }
                 Console.WriteLine("Changes Saved. Press any key to return to the main menu.");

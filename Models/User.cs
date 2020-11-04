@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BloggerApplication.Models
+﻿namespace BloggerApplication.Models
 {
-    public class User
+    class User
     {
         //private int userID ;
         private string username;
         private string password;
-
         public void setUsername(string usern)
         {
             username = usern;
@@ -22,7 +17,6 @@ namespace BloggerApplication.Models
         {
             password = pass;
         }
-
         public string getPassword()
         {
             return password;

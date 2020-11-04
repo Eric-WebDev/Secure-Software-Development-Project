@@ -4,27 +4,24 @@ using BloggerApplication.Seciurity;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
 
 namespace BloggerApplication.View
 {
-   static class RegisterLogin
+    static class RegisterLogin
     {
-        // storage location
-         public static string location; 
+        public static string location;
         public static void UserVerify()
         {
-
-            Console.WriteLine("Write 'Register' if you want to sign up, 'Log in' if you want to sign in or 'Exit' if you want to close the console");
+            Console.WriteLine(" To continue type one of the below options : \n 'register' if you want to sign up \n 'login' if you want to sign in \n 'exit' if you want to close the console");
             string input = Console.ReadLine();
-            if (input != "Register" && input != "Log in" && input != "Exit")
+            if (input != "Register".ToLower() && input != "Login".ToLower() && input != "Exit".ToLower())
             {
                 Console.WriteLine("Command does not exist");
                 UserVerify();
             }
             else
             {
-                if (input == "Exit")
+                if (input == "exit")
                     Environment.Exit(0);
                 else
                 {
@@ -36,7 +33,7 @@ namespace BloggerApplication.View
                     string pass = MaskPassword();
                     user.setUsername(usern);
                     user.setPassword(pass);
-                    if (input == "Register")
+                    if (input == "register")
                     {
                         if (dbVerifyUsername(user.getUsername()))
                         {
@@ -51,7 +48,7 @@ namespace BloggerApplication.View
                             UserVerify();
                         }
                     }
-                    if (input == "Log in")
+                    if (input == "login")
                     {
                         SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + "C:\\Modules\\Secure Software Development\\BloggerApplication\\DB\\BlogDB.mdf" + ";Integrated Security=True");
                         connection.Open();
@@ -64,7 +61,7 @@ namespace BloggerApplication.View
                             {
                                 string newPass = Convert.ToString(user.getPassword());
                                 string oldPass = Convert.ToString(reader["password"]);
-                                if (Encryption.verifyHashedPass(newPass, oldPass))
+                                if (Encryption.VerifyHashedPass(newPass, oldPass))
                                 {
                                     Dashboard(user.getUsername());
                                 }
@@ -85,12 +82,9 @@ namespace BloggerApplication.View
                     }
                 }
             }
-
-       
-
             static void dbInsertUser(string usern, string pass)
             {
-                SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename="+"C:\\Modules\\Secure Software Development\\BloggerApplication\\DB\\BlogDB.mdf"+";Integrated Security=True");
+                SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + "C:\\Modules\\Secure Software Development\\BloggerApplication\\DB\\BlogDB.mdf" + ";Integrated Security=True");
                 connection.Open();
                 SqlCommand command = new SqlCommand("Insert into dbo.Users (username, password) values (@usern, @pass)", connection);
                 command.Parameters.AddWithValue("@usern", usern);
@@ -98,7 +92,6 @@ namespace BloggerApplication.View
                 command.ExecuteNonQuery();
                 connection.Close();
             }
-
         }
         public static bool dbVerifyUsername(string usern)
         {
@@ -121,7 +114,6 @@ namespace BloggerApplication.View
                 }
             }
         }
-
         public static string MaskPassword()
         {
             string pass = "";
@@ -151,11 +143,12 @@ namespace BloggerApplication.View
             return pass;
         }
 
+        //providing storage location and display menu
         public static void Dashboard(string username)
         {
             Console.WriteLine("You can add your posts now");
-            location = @"C:\Modules\Secure Software Development\BloggerApplication\DB\Storage\"+username+".txt";
-            List<BlogPost> inputList = ConnectionData.StoreData();        
+            location = @"C:\Modules\Secure Software Development\BloggerApplication\DB\Storage\" + username + ".txt";
+            List<BlogPost> inputList = ConnectionData.StoreData();
             Menu.DisplayMenu(inputList);
         }
     }

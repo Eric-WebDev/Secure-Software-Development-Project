@@ -2,11 +2,10 @@
 using BloggerApplication.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BloggerApplication.View
 {
-  static class Menu
+    internal static class Menu
     {
         public static int tableWidth = 120;
         public static void DisplayMenu(List<BlogPost> inputList)
@@ -27,7 +26,6 @@ namespace BloggerApplication.View
             //GC (Garbage collector)  collects all objects that are no longer used from heap and remove them from memory.
             GC.Collect();
         }
-
         private static void MenuSelection(List<BlogPost> inputList, string choice)
         {
             switch (choice)
@@ -68,14 +66,13 @@ namespace BloggerApplication.View
         // Display content of the text file
         private static void ViewAllData(List<BlogPost> inputList)
         {
-            
             if (inputList.Count != 0)
             {
                 foreach (var item in inputList)
                 {
                     PrintLine();
                     PrintRow("Blog Post Id", "Blog Post Category");
-                    PrintRow(Convert.ToString(item.BlogPostId), item.BlogPostCategory);                          
+                    PrintRow(Convert.ToString(item.BlogPostId), item.BlogPostCategory);
                     PrintLine();
                     Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.Black;
@@ -87,7 +84,7 @@ namespace BloggerApplication.View
                     PrintLine();
                     Console.WriteLine();
                 }
-                
+
                 Console.WriteLine("Press any key to return to the main menu.");
             }
             else
@@ -150,8 +147,6 @@ namespace BloggerApplication.View
             {
                 return text.PadRight(width - (width - text.Length) / 2).PadLeft(width);
             }
-          
         }
-
     }
 }

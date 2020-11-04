@@ -1,17 +1,14 @@
-﻿using BloggerApplication.DB;
-using BloggerApplication.Models;
+﻿using BloggerApplication.Models;
 using BloggerApplication.View;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace BloggerApplication.Seciurity
 {
-   static class Encryption
+    internal static class Encryption
     {
-
         internal static void Encrypt(List<BlogPost> inputList, byte[] key, byte[] iv)
         {
             try
@@ -19,9 +16,11 @@ namespace BloggerApplication.Seciurity
                 using (AesManaged aesAlg = new AesManaged())
                 {
                     aesAlg.Padding = PaddingMode.PKCS7;
-                    aesAlg.KeySize = 128;           // in bits
-                    aesAlg.Key = new byte[128 / 8]; // 16 bytes for 128 bit encryption
-                    aesAlg.IV = new byte[128 / 8];  // AES needs a 16-byte IV
+                    aesAlg.KeySize = 128;
+                    // 16 bytes for 128 bit encryption
+                    aesAlg.Key = new byte[128 / 8];
+                    // AES needs a 16-byte IV
+                    aesAlg.IV = new byte[128 / 8];
                     ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
 
                     using (FileStream fs = File.Open(RegisterLogin.location, FileMode.OpenOrCreate))
@@ -32,7 +31,7 @@ namespace BloggerApplication.Seciurity
                             {
                                 foreach (var line in inputList)
                                 {
-                                    sWriter.Write($"{line.BlogPostId},{line.BlogPostCategory},{line.BlogPostTitle},{line.BlogPostContent}");
+                                    sWriter.Write($"{line.BlogPostId},{line.BlogPostCategory},{line.BlogPostTitle},{line.BlogPostContent}|");
                                 }
                             }
                         }
@@ -44,13 +43,10 @@ namespace BloggerApplication.Seciurity
                 Console.WriteLine("Encryption error: {0}", e.Message);
             }
         }
-
-        /// <summary>
-        /// Decrypt the data from the text file
-        /// </summary>
-        /// <param name="key">Secret key used for the symmetric algorithm</param>
-        /// <param name="iv">Initialization Vector to use for the symmetric algorithm</param>
-        /// <returns>String containing decrypted contents of text file</returns>
+        // Data decrypted from the text file 
+        // Secret "key" used for the symmetric algorithm
+        // Initialization Vector "iv"  used for the symmetric algorithm
+        // Return String containing decrypted contents of text file
         internal static string Decrypt(byte[] key, byte[] iv)
         {
             if (key == null || key.Length <= 0)
@@ -64,9 +60,9 @@ namespace BloggerApplication.Seciurity
                 using (Aes aesAlg = Aes.Create())
                 {
                     aesAlg.Padding = PaddingMode.PKCS7;
-                    aesAlg.KeySize = 128;           // in bits
-                    aesAlg.Key = new byte[128 / 8]; // 16 bytes for 128 bit encryption
-                    aesAlg.IV = new byte[128 / 8];  // AES needs a 16-byte IV
+                    aesAlg.KeySize = 128;
+                    aesAlg.Key = new byte[128 / 8];
+                    aesAlg.IV = new byte[128 / 8];
                     ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
 
                     using (FileStream reader = new FileStream(RegisterLogin.location, FileMode.Open))
@@ -87,7 +83,6 @@ namespace BloggerApplication.Seciurity
                 throw;
             }
         }
-
         public static string HashPassword(string pass)
         {
             RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
@@ -102,7 +97,7 @@ namespace BloggerApplication.Seciurity
             string savedPass = Convert.ToBase64String(hashBytes);
             return savedPass;
         }
-        public static bool verifyHashedPass(string newPw, string oldPw)
+        public static bool VerifyHashedPass(string newPw, string oldPw)
         {
             byte[] hashBytes = Convert.FromBase64String(oldPw);
             byte[] salt = new byte[16];

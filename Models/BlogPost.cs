@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BloggerApplication.Models
+﻿namespace BloggerApplication.Models
 {
     class BlogPost
     {
@@ -10,8 +6,7 @@ namespace BloggerApplication.Models
         public string BlogPostCategory { get; set; }
         public string BlogPostTitle { get; set; }
         public string BlogPostContent { get; set; }
-
-        public BlogPost(string blogId, string blogCategory, string blogPostTitle,string blogPostContent )
+        public BlogPost(string blogId, string blogCategory, string blogPostTitle, string blogPostContent)
         {
             BlogPostId = blogId;
             BlogPostCategory = blogCategory;
